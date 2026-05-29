@@ -1,0 +1,9 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+@import url('https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
+
+@import url('./admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css');
+@import url('./admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css');
+@import url('./admin/dist/css/adminlte.min.css');
+@import url('./admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css');
+@import url('./admin/plugins/daterangepicker/daterangepicker.css');
+@import url('./admin/plugins/summernote/summernote-bs4.css');

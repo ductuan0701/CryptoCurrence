@@ -2,8 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\KLTN_ITBlog_BE",
+    "\\KLTN_ITBlog_BE\\app",
+    "\\KLTN_ITBlog_BE\\app\\config",
     "\\KLTN_ITBlog_FE"
   ],
-  "SelectedNode": "\\.gitignore",
+  "SelectedNode": "\\KLTN_ITBlog_BE\\package.json",
   "PreviewInSolutionExplorer": false
 }
