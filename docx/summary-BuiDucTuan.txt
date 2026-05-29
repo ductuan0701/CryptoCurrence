@@ -1,0 +1,22 @@
+Hostname Server: cs-linus-20260504052434314
+Tên source code: CryptoCurrence
+Công nghẹe của source: NodeJS
+Tên image đã build: crypto_frontend, crypto_backend, mysql:8.0
+Tên service trong docker-compose: db, backend,frontend
+Port host: 3000, 3001, 3306
+Port container: 3000,3001,3306
+1. Em viết 2 file docker file riêng biệt cho BE và FE và có tận dụng cache để copy package.json và chạy install npm trước khi copy source code
+2. Em dùng docker compose để liên kết 3 service(db, fe,be), cấu hinhf biến môi trường db, thiết lập dêpnds_on để chạy Db trước và sử dungj volume để baỏ vệ db
+3. Em nghĩ là do việc không có dêpend_on ở BE để cho DB chaỵ trưóc khi BE chạy
+4.
+-Lỗi cú pháp:COPY ..
+-Port host bị một ưngs dụng khác dùng
+-Thiếu .dockerignore gây copy toàn bộ thư mục ko cần thiết
+-Treo máy khi build FE vò thiếu RAM
+-Sai thông tin biêns môi trưòng và ở trong environment không nên để lộ thông tin môi trường mà phải đâỷ qua .env
+5.
+- Em sẽ thêm một service Nginx làm Reverse Proxy đứng trước để hứng mọi request từ port 80/443, sau đó điều phối vào frontend hoặc backend. 
+- Tách toàn bộ environment ra một file .env riêng biệt không đưa lên git để bảo mật. 
+- Sử dụng bind mount cho thư mục lưu trữ hình ảnh (uploads) của backend ra ngoài host để dễ dàng quản lý file tĩnh.
+
+

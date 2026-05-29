@@ -1,0 +1,5 @@
+Tên source: KLTN_Sale
+Công nghệ: NodeJS
+File chạy chính: server.js
+Port: 3001
+App cần biến một trường để chạy
