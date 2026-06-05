@@ -1,0 +1,25 @@
+1. Cloudflare đứng ở đâu trong hệ thống? 
+
+- Vị trí: Cloudflare đóng vai trò là một "Reverse Proxy toàn cầu" (Global Edge Network), đứng ở giữa Người dùng cuối (User/Browser) và Máy chủ gốc của dự án (Origin Server - Ubuntu). 
+
+- Mọi luồng dữ liệu (traffic) từ Internet muốn đi vào domain/subdomain đều phải đi xuyên qua mạng lưới của Cloudflare trước khi đến được server Ubuntu. 
+
+  
+
+2. Nó làm gì? 
+
+- Phân giải DNS: Quản lý và định tuyến các bản ghi domain/subdomain. 
+
+- Ẩn danh (Proxy): Che giấu địa chỉ IP thực của server Ubuntu. 
+
+- Bảo mật: Lọc các luồng truy cập độc hại, chặn tấn công DDoS, chặn botnet và chống SQL Injection ngay tại "cửa ngõ" Internet trước khi chúng kịp chạm tới server. 
+
+- Cung cấp SSL/HTTPS: Mã hóa kết nối tự động giữa người dùng và website. 
+
+  
+
+3. Vì sao không nên để lộ Origin IP? 
+
+- Nếu IP gốc (ví dụ: 202.92.7.123) bị lộ, tin tặc (hacker) có thể cấu hình công cụ tấn công trỏ thẳng vào IP này, hoàn toàn "đi vòng" qua mặt lớp bảo vệ của Cloudflare. 
+
+ 

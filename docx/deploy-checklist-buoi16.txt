@@ -1,0 +1,25 @@
+QUY TRÌNH DEPLOY THỦ CÔNG RÚT GỌN
+
+1. Cập nhật Code mới
+- SSH vào server, mở thư mục dự án.
+- git pull origin main
+- git log -1 (Xác nhận đúng phiên bản commit)
+
+2. Build Image và Khởi chạy lại Stack
+- docker compose down (Gỡ bỏ container cũ)
+- docker compose up -d --build (Đóng gói Image mới và chạy ngầm)
+
+3. Kiểm tra trạng thái Container
+- docker compose ps
+- Yêu cầu đạt: Tất cả trạng thái "Up", chỉ Nginx mở port ra ngoài.
+
+4. Kiểm tra Log hệ thống
+- docker compose logs --tail=50 frontend backend
+- Yêu cầu đạt: Không có lỗi FATAL/ERROR hoặc dấu hiệu crash ứng dụng.
+
+5. Kiểm tra kết nối và Domain
+- Test Local: curl -I -H "Host: ductuan71.top" http://localhost:8080
+  (Yêu cầu: Phản hồi mã HTTP 200 OK)
+- Test Public: Mở trình duyệt ẩn danh truy cập http://ductuan71.top:8080 và các subdomain.
+  (Yêu cầu: Load thành công giao diện và API mới).
+

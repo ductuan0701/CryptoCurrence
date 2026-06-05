@@ -1,0 +1,30 @@
+Phần 1: Cấu hình hệ thống hiện tại
+- Server: Ubuntu
+- Service: Hệ thống gồm 3 tầng (Frontend, Backend, Database) đóng gói trong Docker.
+- Port: Cổng public 8080 (trỏ về Nginx), các cổng nội bộ (3306, 3000) được đóng kín trong mạng Docker.
+- Reverse Proxy: Nginx làm cổng tiếp nhận duy nhất.
+- Domain/Subdomain: ductuan71.top và api.ductuan71.top.
+- Edge Layer: Cloudflare (quản lý DNS, chặn DDoS, bảo vệ IP gốc).
+
+Phần 2: Luồng truy cập hệ thống
+1. User: Gõ tên miền trên trình duyệt.
+2. Cloudflare: Tiếp nhận traffic và chuyển tiếp về IP server qua cổng 8080.
+3. Nginx: Nhận tín hiệu, phân tích Header (Host) để điều phối request.
+4. App Container: Nginx route vào đúng Container Frontend/Backend. Backend truy vấn DB nội bộ.
+
+Phần 3: Quy trình deploy
+- Phương thức: Triển khai thủ công có script hỗ trợ (deploy-basic.sh).
+- Tự động hóa: Có script thực hiện pull code, build image và restart stack.
+- Kiểm tra: Sử dụng checklist verify (post-deploy-verify.txt) để kiểm tra container, log và response trước khi kết luận thành công.
+
+Phần 4: 5 Rủi ro kỹ thuật
+1. Lộ Origin IP: Kẻ tấn công có thể bỏ qua lớp đệm Cloudflare để tấn công thẳng server.
+2. Lỗi con người: Thao tác tay dù có script vẫn dễ quên bước verify.
+3. Thiếu chiến lược Rollback: Chưa có phương án quay lại phiên bản cũ ngay lập tức khi lỗi.
+4. Thiếu Monitoring: Thiếu công cụ giám sát hiệu năng hệ thống theo thời gian thực.
+5. Single Point of Failure: Hệ thống chạy trên 1 VPS duy nhất, thiếu dự phòng.
+
+Phần 5: 3 việc ưu tiên cải thiện
+1. Hoàn thiện CICD Pipeline: Tích hợp tự động build/deploy qua GitHub Actions.
+2. Triển khai Monitoring: Cài đặt công cụ giám sát (như Netdata) để theo dõi sức khỏe server.
+3. Siết chặt Firewall & Nginx: Tối ưu cấu hình Nginx và UFW nghiêm ngặt hơn.

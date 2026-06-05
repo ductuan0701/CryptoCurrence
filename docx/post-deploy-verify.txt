@@ -1,0 +1,20 @@
+1. Kiểm tra trạng thái Container
+- Lệnh: docker compose ps
+- Tiêu chí: Tất cả mang trạng thái "Up", không có lỗi "Restarting/Exited".
+
+2. Kiểm tra Port
+- Lệnh: sudo ss -tulnp | grep docker-proxy
+- Tiêu chí: Chỉ mở cổng public (8080), ẩn hoàn toàn cổng nội bộ (3306, 3000...).
+
+3. Kiểm tra Log
+- Lệnh: docker compose logs --tail=50
+- Tiêu chí: Không có cảnh báo lỗi nghiêm trọng (FATAL, ERROR, Exception).
+
+4. Kiểm tra Response (Local)
+- Lệnh: curl -I -H "Host: ductuan71.top" http://localhost:8080
+- Tiêu chí: Nginx phân luồng đúng, trả về mã HTTP 200 OK.
+
+5. Kiểm tra Trình duyệt (Public)
+- Thao tác: Dùng tab ẩn danh truy cập http://ductuan71.top:8080 và subdomain API.
+- Tiêu chí: Giao diện load đầy đủ (không vỡ layout), test thử chức năng gọi API thành công.
+
