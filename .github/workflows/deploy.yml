@@ -2,7 +2,7 @@ name: CI/CD Pipeline cho CryptoCurrence
 
 on:
   push:
-    branches: [ "main" ] # Pipeline chạy khi có code push lên nhánh main
+    branches: [ "main" ]
 
 jobs:
   deploy:
