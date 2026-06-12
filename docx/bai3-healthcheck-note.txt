@@ -1,0 +1,16 @@
+1. SCRIPT NÀY GIÚP ÍCH GÌ?
+- Tự động hóa quy trình kiểm tra sau deploy, giúp rà soát toàn diện hệ thống chỉ bằng 1 câu lệnh thay vì gõ thủ công nhiều bước.
+- Cung cấp bức tranh toàn cảnh (snapshot) về sức khỏe server: từ tài nguyên, port, trạng thái container đến log ứng dụng.
+- Giảm thiểu sai sót của con người (quên lệnh, bỏ sót bước) trong quá trình vận hành hệ thống CI/CD.
+
+2. NẾU MỞ RỘNG TIẾP, EM SẼ THÊM GÌ?
+- Tích hợp thông báo (Alerting): Thêm lệnh cURL để bắn kết quả kiểm tra (Pass/Fail) thẳng về nhóm chat Telegram hoặc Slack của team dự án.
+- Ghi log tự động: Lưu trực tiếp kết quả của script này ra một file (vd: health-report-YYYYMMDD.log) để lưu trữ và truy vết sự cố sau này.
+- Cơ chế Auto-healing (Tự phục hồi): Thêm logic if/else để tự động restart lại container nếu phát hiện Health Endpoint trả về mã lỗi 500 hoặc bị timeout.
+
+3. 5 LỖI KỸ THUẬT CÓ THỂ PHÁT HIỆN NHỜ SCRIPT NÀY
+- Lỗi 1: Container bị Crash Loop (Phát hiện ở mục check container khi State báo "Restarting" hoặc "Exited").
+- Lỗi 2: Xung đột cổng/Port in use (Phát hiện khi lệnh ss -tulnp không thấy cổng 8443 hoặc 8081 đang LISTEN).
+- Lỗi 3: Ứng dụng không kết nối được Database (Phát hiện qua việc đọc log Backend thấy lỗi "Access denied" hoặc "Connection refused").
+- Lỗi 4: Nginx cấu hình sai Proxy Pass (Phát hiện khi check response bằng curl báo lỗi 502 Bad Gateway).
+- Lỗi 5: Ứng dụng bị treo hoặc thiếu biến môi trường (Phát hiện khi gọi Health Endpoint trả về lỗi dù container vẫn báo Up).

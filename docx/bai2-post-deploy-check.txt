@@ -1,0 +1,38 @@
+TỔNG KẾT BÀI 2: CHECKLIST BẮT BỆNH HỆ THỐNG SAU DEPLOY
+
+1. TRÌNH TỰ KIỂM TRA VÀ CÂU LỆNH TƯƠNG ỨNG
+Bước 1: Kiểm tra trạng thái Container (Có sống thực sự hay đang ngắc ngoải)
+- Lệnh: docker compose ps
+- Mục đích: Đảm bảo không có container nào ở trạng thái "Restarting" (Crash Loop).
+
+Bước 2: Kiểm tra Port kết nối (Cửa có mở không)
+- Lệnh: ss -tulnp | grep LISTEN
+- Mục đích: Xác nhận Nginx đã bind thành công vào cổng dịch vụ trên máy chủ Host.
+
+Bước 3: Kiểm tra Response cục bộ bằng Curl (Test từ bên trong)
+- Lệnh: curl -I http://localhost:<port>
+- Mục đích: Loại trừ lỗi do màng lọc mạng bên ngoài (Cloudflare/Firewall). Nếu curl nội bộ trả về 200 OK thì lỗi do mạng ngoài, nếu trả 50x thì lỗi do hệ thống bên trong.
+
+Bước 4: Kiểm tra Health Endpoint của App
+- Lệnh: curl http://localhost:3001/health 
+- Mục đích: Đảm bảo Backend không chỉ bật lên được, mà còn kết nối thành công tới Database/Redis.
+
+Bước 5: Rà soát Logs của Nginx (Lớp điều phối)
+- Lệnh: docker logs crypto_nginx --tail 50
+- Mục đích: Tìm các mã lỗi 502 (Bad Gateway - Không gọi được App) hoặc 504 (Gateway Timeout - App phản hồi quá chậm).
+
+Bước 6: Rà soát Logs của App (Lớp lõi)
+- Lệnh: docker logs crypto_backend_app --tail 50
+- Mục đích: Tìm các lỗi runtime như thiếu thư viện, sai thông tin DB, lỗi cú pháp code mới push.
+
+
+2. 5 NGUYÊN NHÂN LỖI CÓ THỂ GẶP (KHI GITHUB XANH MÀ WEB CHẬP CHỜN)
+- Nguyên nhân 1: Quá tải tài nguyên (OOM - Out of Memory). Code mới ăn quá nhiều RAM khiến container bị hệ điều hành "kill" và khởi động lại liên tục (gây ra hiện tượng lúc vào được lúc không).
+- Nguyên nhân 2: Mất kết nối Database. App khởi động thành công (Actions báo xanh) nhưng thông tin tài khoản/mật khẩu DB cấu hình sai, hoặc DB boot chậm hơn App khiến các API cần query dữ liệu bị lỗi.
+- Nguyên nhân 3: Lỗi proxy_pass trong Nginx. Nginx trỏ sai tên container hoặc sai port nội bộ của App trong file default.conf.
+- Nguyên nhân 4: Xung đột bộ nhớ đệm (Cache/Session). Trình duyệt của người dùng hoặc Cloudflare vẫn lưu cache giao diện/file tĩnh bản cũ, gây xung đột với API bản mới.
+- Nguyên nhân 5: Biến môi trường (.env) bị thiếu. Code mới yêu cầu một biến môi trường mới (như API Key bên thứ 3) nhưng chưa được khai báo trên Server.
+
+
+3. KẾT LUẬN
+Việc GitHub Actions báo Success chỉ chứng minh quá trình "Build & Run" hoàn tất về mặt thủ tục. Để xác định chính xác điểm chết của hệ thống khi có hiện tượng chập chờn, kỹ sư phải tuân thủ nguyên tắc "Truy vết từ ngoài vào trong": Đi từ kiểm tra Port -> Đọc log luồng Nginx -> Kiểm tra Health Check -> Đọc log chi tiết của App. Nơi nào ném ra exception đầu tiên, nơi đó là tác nhân gốc (Root Cause).

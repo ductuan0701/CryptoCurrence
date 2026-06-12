@@ -1,0 +1,19 @@
+Công cụ: Minikube
+
+Cài ở :Máy tính cá nhân
+
+6 khái niệm:
+Cluster là tập hợp các cụm máy chủ(node)
+Node là 1 máy chủ trong Cluster, đây là nơi production chạy
+Pod là đơn vị nhỏ nhất tương tụư container ở docker
+Deployment là nơi quản lí vòng đời ưngs dụng, giúp mô tả cách ứng dụng được triển khai
+Service là 1 lớp giúp tạo điểm truy cập ổn định, trỏ tơí 1 nhóm pod, giúp workload gọi vào web app dễ hơn, hỗ trợ cân bằng tải tới các pod
+Ingress giống như reverse proxy là nguoừi gác cổng giữa request client vơí các service
+
+5 điểm khác nhau giữa k8s và docker compose:
+Phạm vi: Docker compose chỉ chạy trên 1 host duy nhất
+Cơ chế tự phục hồi ở K8S, khi môtj node chêts nó sẽ tự động chuyển snag node khác
+Cập nhật không gián đoạn (Zero-downtime Deployment): Khi update code mới, Compose thường làm ngắt quãng ứng dụng một lúc. K8s mặc định hỗ trợ Rolling Update (bật app mới lên chạy ngon lành rồi mới từ từ tắt app cũ đi), giúp người dùng không hề hay biết hệ thống vừa được bảo trì.
+Service ở K8S không pahir là systemctl service mà nó là 1 lớp tạo điểm truy cập
+Cấu hình (Manifests): Compose gom mọi thứ vào chung 1 file `docker-compose.yml` khá đơn giản. K8s chia nhỏ thành vô số file YAML cấu hình riêng biệt (1 file cho Deployment, 1 file cho Service, 1 file cho Ingress...) nên rất phức tạp và khó học ở giai đoạn đầu.
+

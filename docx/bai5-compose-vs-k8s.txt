@@ -1,0 +1,33 @@
+PHẦN 1: KIẾN TRÚC HIỆN TẠI (DOCKER COMPOSE)
+- Luồng chạy: User -> Cloudflare (bảo vệ, SSL) -> Nginx (Reverse Proxy) -> App & DB.
+- Hạ tầng: Tất cả gom chung trong 1 Server duy nhất bằng Docker Compose.
+- CI/CD: Push-based (GitHub Actions tự động SSH vào server để pull code và deploy).
+
+PHẦN 2: KIẾN TRÚC ĐỊNH HƯỚNG (KUBERNETES - K8S)
+- Luồng chạy: User -> Cloudflare -> Ingress (Lễ tân/Định tuyến) -> Service (Phân tải) -> Pod (chứa App).
+- Hạ tầng: Hệ thống rải đều trên nhiều máy chủ (Node), quản lý tập trung qua một Cụm (Cluster).
+- CI/CD: Pull-based qua GitOps (K8s tự động theo dõi Git và tự cập nhật trạng thái mới nhất).
+
+PHẦN 3: SO SÁNH & NHẬN XÉT CÁ NHÂN
+1. Chọn mô hình nào?
+- Dùng Compose: Khi làm dự án nhỏ, MVP, traffic ổn định, không yêu cầu High Availability (HA).
+- Lên K8s: Khi có lượng truy cập đột biến (cần auto-scale), kiến trúc Microservices lớn và cần Zero-Downtime.
+
+2. 5 Rủi ro nếu hệ thống lớn vẫn xài 1 Server + Compose:
+- Chết server là sập toàn bộ hệ thống.
+- Bottleneck (Nghẽn cổ chai): 1 máy chủ không thể gánh tải khi traffic x10, x100.
+- Downtime: Rớt kết nối người dùng mỗi khi khởi động lại container để cập nhật.
+- Rối loạn quản lý: Quá khó để giám sát hàng chục dịch vụ (Microservices) chạy chung.
+- Rủi ro dữ liệu: Hỏng ổ cứng vật lý là Database dễ đi.
+
+TỔNG KẾT QUÁ TRÌNH CHUYỂN ĐỔI
+
+* 3 Lợi ích lớn nếu lên K8s:
+1. Tự phục hồi (Auto-healing): Server lỗi, K8s tự bế App sang server khác chạy tiếp.
+2. Tối ưu chi phí: Tự động đẻ thêm/tắt bớt Pod theo lượng truy cập thực tế.
+3. Deploy chuyên nghiệp: Khách không bị rớt mạng khi cập nhật code mới (Zero-downtime).
+
+* 3 Khó khăn team sẽ gặp:
+1. Rất khó học: Cấu trúc phức tạp, team cần nhiều thời gian để đào tạo (Learning curve dốc).
+2. Tốn tiền hạ tầng ban đầu: Riêng hệ thống lõi (Control Plane) đã ngốn rất nhiều RAM/CPU.
+3. Vận hành cồng kềnh: Dùng K8s cho web nhỏ giống như "lấy dao mổ trâu đi giết gà", sinh ra nhiều file cấu hình phức tạp không cần thiết.
