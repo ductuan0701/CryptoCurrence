@@ -13,6 +13,7 @@ services:
       - ./KLTN_ITBlog_BE/init.sql:/docker-entrypoint-initdb.d/init.sql
   backend:
     image: crypto-backend
+    build: ./KLTN_ITBlog_BE
     container_name: crypto_backend_app
     restart: always
     environment:
@@ -26,6 +27,7 @@ services:
 
   frontend:
     image: crypto-frontend
+    build: ./KLTN_ITBlog_FE
     container_name: crypto_frontend_app
     restart: always
     depends_on:
