@@ -1,0 +1,24 @@
+TỔNG KẾT BÀI 1: CI/CD THỰC HÀNH CƠ BẢN
+
+1. Tên Repository: 
+- CryptoCurrence
+
+2. Workflow làm nhiệm vụ gì: 
+- Lắng nghe sự kiện (trigger) khi có code mới được push lên nhánh `main`.
+- Thiết lập môi trường chạy tự động trên GitHub Actions (ubuntu-latest).
+- Đăng nhập bảo mật vào server thực tế (IP 202.92.7.123) thông qua SSH key.
+- Tự động thực thi chuỗi lệnh: di chuyển vào thư mục dự án, `git pull` code mới nhất từ GitHub và chạy script triển khai để cập nhật lại hệ thống Docker (cụ thể là `deploy-basic.sh` / `docker compose up -d`).
+
+3. Pipeline đã chạy bước nào: 
+- Quá trình chạy CI/CD đã thực thi và hoàn tất toàn bộ các steps khai báo trong Job "deploy", trọng tâm gồm 2 bước chính:
+  + Checkout Code (uses: actions/checkout@v3)
+  + Deploy to Server via SSH (uses: appleboy/ssh-action@v1.0.3)
+
+4. Tình trạng Deploy: 
+- Deploy tự động THÀNH CÔNG (Trạng thái Pipeline báo tích xanh Success trên GitHub Actions). Hệ thống trên server đã được cập nhật bản code mới nhất mà không cần thao tác thủ công.
+
+5. Các lệnh đã dùng để Verify:
+Để minh chứng hệ thống đã chạy trơn tru sau khi được CI/CD deploy, em đã sử dụng các lệnh kiểm tra trực tiếp trên Terminal của Server:
+- `ss -tulnp | grep 80` (và các lệnh kiểm tra port liên quan): Để xác nhận các cổng dịch vụ (như 80, 8081, 443, 8080) đã được tiến trình docker-proxy mở và ở trạng thái LISTEN sẵn sàng đón khách.
+- `docker compose ps`: Để kiểm tra trạng thái tất cả các container (nginx, frontend, backend, db) đều đang "Up" và hoạt động khỏe mạnh.
+- `docker compose logs --tail=20`: Để kiểm tra log khởi chạy của các dịch vụ xem có phát sinh lỗi crash nào ở bên trong không.
