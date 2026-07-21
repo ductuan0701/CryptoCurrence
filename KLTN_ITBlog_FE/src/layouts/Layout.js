@@ -28,12 +28,24 @@ const Layout = () => {
   // Ensure theme is correctly destructured from the context
   const { theme } = useTheme(); // Access theme from context
 
-  if (location.pathname === '/admin/dang-nhap' || location.pathname === '/admin/dang-nhap/') {
-    isDangNhap = true;
-  }
+  const hostname = window.location.hostname;
 
-  if (location.pathname.split('/')[1] === 'admin') {
+  // 1. Xử lý cho Admin (Bằng Subdomain HOẶC đường dẫn /admin cũ để tương thích ngược)
+  if (hostname === 'admin.ductuan71.top' || location.pathname.startsWith('/admin')) {
     isAdmin = true;
+    if (location.pathname.includes('/dang-nhap')) {
+      isDangNhap = true;
+    }
+  } 
+  // 2. Xử lý cho trang Login chung (Subdomain login)
+  else if (hostname === 'login.ductuan71.top') {
+    isDangNhap = true;
+  } 
+  // 3. Xử lý cho User bình thường (ductuan71.top)
+  else {
+    if (location.pathname === '/dang-nhap' || location.pathname === '/dang-nhap/') {
+      isDangNhap = true;
+    }
   }
 
   useEffect(() => {
