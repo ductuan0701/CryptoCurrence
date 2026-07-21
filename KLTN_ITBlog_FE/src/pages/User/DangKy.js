@@ -152,11 +152,13 @@ const DangKy = () => {
       password,
       confirmPassword,
     });
-    if (register.response && register.response.status === 400) {
-      toast.error(register.response.data.message);
-    } else {
-      toast.success(register.data.message);
+    if (register?.response && register.response.status === 400) {
+      toast.error(register.response.data?.message || "Dữ liệu không hợp lệ");
+    } else if (register?.data) {
+      toast.success(register.data.message || "Đăng ký thành công!");
       navigate("/dang-nhap");
+    } else {
+      toast.error("Lỗi kết nối máy chủ. Vui lòng kiểm tra API URL!");
     }
   };
 
