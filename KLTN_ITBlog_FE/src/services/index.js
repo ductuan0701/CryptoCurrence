@@ -39,7 +39,8 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    // Kiểm tra an toàn xem error.response có tồn tại không trước khi đọc status
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = getRefreshToken();
       try {
@@ -61,6 +62,7 @@ axiosInstance.interceptors.response.use(
         //return Promise.reject(refreshError);
       }
     }
+    // Trả về error thay vì ném lỗi, cần đảm bảo component xử lý cẩn thận
     return error;
   }
 );

@@ -151,3 +151,13 @@ CREATE TABLE IF NOT EXISTS article_images (
 );
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- Thêm tài khoản admin mặc định (Tài khoản: admin / Mật khẩu: admin123)
+INSERT IGNORE INTO users (username, role, email, password_hash, fullname)
+VALUES (
+    'admin', 
+    'admin', 
+    'admin@ductuan71.top', 
+    '$2a$10$nOuE/mG5b.Dms8CjEOM03OONfI21D/20rU30nJvE8T3eHhU72XkOW', 
+    'Quản trị viên hệ thống'
+);
