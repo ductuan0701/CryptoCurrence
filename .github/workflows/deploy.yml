@@ -24,7 +24,7 @@ jobs:
           envs: API_URL
           script: |
             echo "=== BẮT ĐẦU PULL CODE VÀ DEPLOY TỰ ĐỘNG ==="
-            cd ~/btvn14_Tuan/CryptoCurrence
+            cd ~/Tuan/CryptoCurrence
             git pull origin main
             echo "REACT_APP_API_URL=$API_URL" > ./KLTN_ITBlog_FE/.env
             chmod +x deploy-basic.sh
