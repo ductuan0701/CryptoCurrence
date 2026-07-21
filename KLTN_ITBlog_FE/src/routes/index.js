@@ -27,8 +27,35 @@ import ThongKeUserRoutes from './User/ThongKeUserRoutes';
 
 
 const AppRoutes = () => {
+  const hostname = window.location.hostname;
+
+  if (hostname === 'admin.ductuan71.top') {
+    return (
+      <Routes>
+        <Route path="admin/bai-viet/*" element={<BaiVietRoutes />} />
+        <Route path="admin/chuyen-muc/*" element={<ChuyenMucRoutes />} />
+        <Route path="admin/nguoi-dung/*" element={<NguoiDungRoutes />} />
+        <Route path="admin/ca-nhan/*" element={<CaNhanRoutes />} />
+        <Route path="admin/binh-luan/*" element={<BinhLuanRoutes />} />
+        <Route path="admin/dang-nhap/" element={<DangNhapRoutes />} />
+        <Route path="admin/*" element={<ThongKeRoutes />} />
+        {/* Quan trọng: Mặc định trang chủ của admin.ductuan71.top/ sẽ render thống kê */}
+        <Route path="/" element={<ThongKeRoutes />} />
+      </Routes>
+    );
+  }
+
+  if (hostname === 'login.ductuan71.top') {
+    return (
+      <Routes>
+        <Route path="*" element={<UserDangNhapRoutes />} />
+      </Routes>
+    );
+  }
+
   return (
     <Routes>
+      {/* Giữ nguyên tương thích nếu lỡ gõ /admin trên domain chính */}
       <Route path="admin/bai-viet/*" element={<BaiVietRoutes />} />
       <Route path="admin/chuyen-muc/*" element={<ChuyenMucRoutes />} />
       <Route path="admin/nguoi-dung/*" element={<NguoiDungRoutes />} />
@@ -53,7 +80,6 @@ const AppRoutes = () => {
       <Route path="/doi-mat-khau/*" element={<MatKhauMoiRoutes />} />
       <Route path="/404/*" element={<Page404Routes />} />
       <Route path="/thong-ke/*" element={<ThongKeUserRoutes />} />
-
     </Routes>
   );
 };
